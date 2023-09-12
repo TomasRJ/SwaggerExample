@@ -37,9 +37,7 @@ paths:
         '400':
           description: Error
         '404':
-          description: Order not found
-        '418':
-          description: I'm a teapot
+          description: Book not found
     post:
       tags:
         - book
@@ -47,18 +45,9 @@ paths:
       description: Add a new book to the store
       operationId: addBook
       requestBody:
-        description: Create a new pet in the store
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Book'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Book'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Book'
+        description: Book object that needs to be added to the store
         required: true
+        $ref: '#/components/requestBodies/Book'        
       responses:
         '200':
           description: Successful operation
@@ -81,7 +70,7 @@ paths:
       parameters:
         - name: BookId
           in: path
-          description: ID of Book to return
+          description: ID of book that needs to be fetched
           required: true
           schema:
             type: integer
@@ -95,7 +84,10 @@ paths:
                 $ref: '#/components/schemas/Book'          
             application/xml:
               schema:
-                $ref: '#/components/schemas/Pet'
+                $ref: '#/components/schemas/Book'
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: '#/components/schemas/Book'
         '400':
           description: Invalid ID supplied
         '404':
@@ -596,6 +588,9 @@ components:
         name:
           type: string
           example: Man Who Knew Infinity
+        author:
+          type: string
+          example: Robert Kanigel
         category:
           $ref: '#/components/schemas/Category'
         genre:
@@ -610,6 +605,25 @@ components:
           example: 25
       xml:
         name: book
+    AddBook:
+      type: object
+      properties:
+        name:
+          type: string
+          example: The Man Who Knew Infinity
+        author:
+          type: string
+          example: Robert Kanigel
+        category:
+          type: integer
+          format: int64
+          example: [2,4]
+        genre:
+          type: array
+          items:
+            type: integer
+            format: int64
+            example: [1,2]
     Genre:
       type: object
       properties:
@@ -619,7 +633,7 @@ components:
           example: 1
         name:
           type: string
-          example: Autobiography & Memoir
+          example: Autobiography, Memoir
     Order:
       type: object
       properties:
@@ -800,6 +814,18 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/Pet'
+    Book:
+      description: Book object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AddBook'          
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/AddBook'          
+        application/x-www-form-urlencoded:
+          schema:
+            $ref: '#/components/schemas/AddBook'
     UserArray:
       description: List of user object
       content:
